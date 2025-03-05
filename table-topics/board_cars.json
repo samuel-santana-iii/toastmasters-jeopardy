@@ -1,0 +1,299 @@
+{
+    "double-jeopardy": [
+        {
+            "name": "NINTENDO",
+            "questions": [
+                {
+                    "answer": "What is Game Boy?",
+                    "question": "VARIANTS OF THIS HANDHELD INCLUDE COLOR, POCKET, ADVANCE, AND MICRO",
+                    "value": 200
+                },
+                {
+                    "answer": "Who is Mike Tyson?",
+                    "question": "ORIGINALLY, THE NES VERSION OF PUNCH-OUT!! FEATURED THIS REAL-LIFE BOXER AS THE END BOSS",
+                    "value": 400
+                },
+                {
+                    "answer": "What is tennis?",
+                    "question": "MARIO PLAYS THIS SPORT IN THE NORTH AMERICAN PACK-IN GAME FOR THE VIRTUAL BOY",
+                    "value": 600
+                },
+                {
+                    "answer": "What is hanafuda?",
+                    "question": "NINTENDO STARTED OUT MAKING DECKS FOR THIS GAME, THE NAME OF WHICH TRANSLATES TO \"FLOWER CARDS\"",
+                    "value": 800
+                },
+                {
+                    "answer": "What is the PlayChoice-10?",
+                    "question": "NINTENDO'S COIN-OPERATED MULTI-GAME NES SYSTEM WAS KNOWN BY THIS NAME IN ARCADES",
+                    "value": 1000
+                }
+            ]
+        },
+        {
+            "name": "ALLITERATION",
+            "questions": [
+                {
+                    "answer": "What is Breaking Bad?",
+                    "question": "WALTER WHITE AND JESSE PINKMAN MAKE METH IN AN RV IN THIS AWARD-WINNING TV DRAMA",
+                    "value": 200
+                },
+                {
+                    "answer": "What is Castle Crashers?",
+                    "question": "THE BEHEMOTH RELEASED THIS MEDIEVAL CO-OP BEAT-EM-UP ON XBOX LIVE ARCADE IN AUGUST 2008",
+                    "value": 400
+                },
+                {
+                    "answer": "Who is Pepper Potts?",
+                    "question": "SHE'S NOT JUST TONY STARK'S ASSISTANT - SHE ALSO SUITS UP AS THE ARMORED HERO CALLED RESCUE",
+                    "value": 600
+                },
+                {
+                    "answer": "Who is Guy Gardner?",
+                    "question": "THIS EGOTIST WOULD HAVE BEEN GREEN LANTERN IF THE RING HADN'T CHOSEN HAL JORDAN FIRST",
+                    "value": 800
+                },
+                {
+                    "answer": "What is Gentle Giant?",
+                    "question": "THIS VISUAL EFFECTS COMPANY CREATES 3D BODY SCANS FOR MOVIES AS WELL AS JUMBO STAR WARS ACTION FIGURES",
+                    "value": 1000
+                }
+            ]
+        },
+        {
+            "name": "COMIC ICONS",
+            "questions": [
+                {
+                    "answer": "What is the Flash?",
+                    "image": "images/flash.png",
+                    "question": "Art courtesy http://kalangozilla.deviantart.com/",
+                    "value": 200
+                },
+                {
+                    "answer": "What is S.H.I.E.L.D.?",
+                    "image": "images/shield.png",
+                    "question": "Art courtesy http://kalangozilla.deviantart.com/",
+                    "value": 400
+                },
+                {
+                    "answer": "What is Deadpool?",
+                    "image": "images/deadpool.png",
+                    "question": "Art courtesy http://kalangozilla.deviantart.com/",
+                    "value": 600,
+                    "daily-double": true
+                },
+                {
+                    "answer": "What is Spawn?",
+                    "image": "images/spawn.png",
+                    "question": "Art courtesy http://kalangozilla.deviantart.com/",
+                    "value": 800
+                },
+                {
+                    "answer": "What is The Red Mist?",
+                    "image": "images/redmist.png",
+                    "question": "Art courtesy http://kalangozilla.deviantart.com/",
+                    "value": 1000
+                }
+            ]
+        },
+        {
+            "name": "BRUCE CAMPBELL",
+            "questions": [
+                {
+                    "answer": "Who is Sam Raimi?",
+                    "question": "BRUCE'S FIRST FILM WITH THIS DIRECTOR WAS THE 1977 SHORT \"IT'S MURDER\"",
+                    "value": 200
+                },
+                {
+                    "answer": "Who is Elvis Presley?",
+                    "question": "IN BUBBA HO-TEP, CAMPBELL FIGHTS A MUMMY AS A GERIATRIC VERSION OF THIS ROCK MUSIC LEGEND",
+                    "value": 400
+                },
+                {
+                    "answer": "Who is Autolycus?",
+                    "question": "BRUCE PLAYED THIS \"KING OF THIEVES\" ON BOTH THE HERCULES & XENA SYNDICATED SERIES",
+                    "value": 600
+                },
+                {
+                    "answer": "What is The Adventures of Brisco County Jr.??",
+                    "question": "BRUCE STARRED IN JUST 27 EPISODES OF THIS SCI-FI WESTERN SERIES BEFORE FOX CANCELLED IT",
+                    "value": 800
+                },
+                {
+                    "answer": "What is The Daring Dragoon?",
+                    "question": "ON JACK OF ALL TRADES, CAMPBELL PLAYED AMERICAN SPY JACK STILES AND THIS MASKED ALTER EGO",
+                    "value": 1000
+                }
+            ]
+        },
+        {
+            "name": "FOUR-LETTER WORDS",
+            "questions": [
+                {
+                    "answer": "What is Duff?",
+                    "question": "IT'S HOMER SIMPSON'S FAVORITE BEER",
+                    "value": 200
+                },
+                {
+                    "answer": "What is LEGO?",
+                    "question": "THE NAME OF THIS INTERLOCKING TOY COMES FROM THE DANISH PHRASE FOR \"PLAY WELL\"",
+                    "value": 400
+                },
+                {
+                    "answer": "What is Cube?",
+                    "question": "THIS 1997 SCI-FI/HORROR FILM ABOUT A MAZE OF MOVING ROOMS WOULD HAVE MADE ERNO RUBIK PROUD",
+                    "value": 600
+                },
+                {
+                    "answer": "What is Rust?",
+                    "question": "FACEPUNCH STUDIOS RELEASED AN ALPHA OF THIS MULTIPLAYER SURVIVAL GAME IN DECEMBER 2013",
+                    "value": 800
+                },
+                {
+                    "answer": "What is Pure?",
+                    "question": "IN 2008, BLACK ROCK STUDIOS CREATED THIS ATV RACING/STUNT GAME FOR DISNEY INTERACTIVE",
+                    "value": 1000
+                }
+            ]
+        },
+        {
+            "name": "POTPOURRI",
+            "questions": [
+                {
+                    "answer": "What is Modern Warfare 2?",
+                    "question": "CONTRARY TO REPORTS, THIS 2009 INFINITY WARD SHOOTER WAS NOT BANNED IN RUSSIA - BUT THE AIRPORT LEVEL WAS REMOVED",
+                    "value": 200
+                },
+                {
+                    "answer": "What is Assassin's Creed III?",
+                    "question": "DESMOND EXPERIENCES THE MEMORIES OF CONNOR IN THIS REVOLUTIONARY TITLE FROM UBISOFT",
+                    "value": 400
+                },
+                {
+                    "answer": "Who is Jimmy Olson?",
+                    "question": "AS \"SUPERMAN'S PAL,\" THIS DC COMICS PHOTOJOURNALIST HAD HIS OWN COMIC FROM 1954 TO 1974",
+                    "value": 600
+                },
+                {
+                    "answer": "What is Adventure Time?",
+                    "question": "THE 3DS GAME BASED ON THIS ANIMATED SERIES IS SUBTITLED \"HEY ICE KING! WHY'D YOU STEAL OUR GARBAGE?!\"",
+                    "value": 800,
+                    "daily-double": true
+                },
+                {
+                    "answer": "What is Pac-Man Fever?",
+                    "question": "OTHER SONGS ON THIS BUCKNER & GARCIA ALBUM INCLUDE \"ODE TO A CENTIPEDE\" AND \"DO THE DONKEY KONG\"",
+                    "value": 1000
+                }
+            ]
+        }
+    ],
+    "final-jeopardy": {
+        "answer": "What is Howard the Duck?",
+        "category": "MARVEL MOVIES",
+        "question": "IT WAS THE FIRST FEATURE-LENGTH MARVEL FILM RELEASED IN THEATERS"
+    },
+    "jeopardy": [
+        {
+            "name": "Story time",
+            "questions": [
+                {
+                    "answer": "Who is Optimus Prime?",
+                    "question": "What is your favorite car story to tell others?",
+                    "value": 100
+                },
+                {
+                    "answer": "Who is IG-88 or 4-LOM?",
+                    "question": "Why are first cars nostalgic?",
+                    "value": 200
+                },
+                {
+                    "answer": "What is The Black Hole?",
+                    "question": "How do you talk yourself out of a speeding ticket?",
+                    "value": 300
+                },
+                {
+                    "answer": "What is Robot Combat League?",
+                    "question": "When should a person get rid of their car?",
+                    "value": 400
+                }
+            ]
+        },
+        {
+            "name": "Opinion",
+            "questions": [
+                {
+                    "answer": "What is Notch?",
+                    "question": "What is so captivating about Tesla vehicles?",
+                    "value": 100
+                },
+                {
+                    "answer": "What is Gabe?",
+                    "question": "Gas, Electric or Hybrid Vehicles?",
+                    "value": 200
+                },
+                {
+                    "answer": "What is Fwiz?",
+                    "question": "German (BMW, Audi) or Japanese (Acura, Lexus)?",
+                    "value": 300
+                },
+                {
+                    "answer": "What is Dude Huge?",
+                    "question": "Were cars better today or in previous decades?",
+                    "value": 400
+                }
+            ]
+        },
+        {
+            "name": "Silly",
+            "questions": [
+                {
+                    "answer": "Who is Bender?",
+                    "question": "If you had a classic car how would you design it? What color and art would be on it?",
+                    "value": 100
+                },
+                {
+                    "answer": "Who is Lando Calrissian?",
+                    "question": "Would you either own a classic car with hydraulics or lifted truck?",
+                    "value": 200
+                },
+                {
+                    "answer": "Who is Tidus?",
+                    "question": "Which is better? Racing with F1 Cars or with horses?",
+                    "value": 300,
+                    "daily-double": true
+                },
+                {
+                    "answer": "Who is Princess Buttercup?",
+                    "question": "Who would win in a car race in this club?",
+                    "value": 400
+                }
+            ]
+        },
+        {
+            "name": "Movie Fun",
+            "questions": [
+                {
+                    "answer": "What is Dark Souls?",
+                    "question": "How does a Spa Day look in Disney Cars?",
+                    "value": 100
+                },
+                {
+                    "answer": "What is Dark Shadows?",
+                    "question": "Which Car would you live as in Disney Cars?",
+                    "value": 200
+                },
+                {
+                    "answer": "What is The Dark Knight Returns?",
+                    "question": "How beneficial would it be for the Transformers to become Fire Fighters?",
+                    "value": 300
+                },
+                {
+                    "answer": "What is The Dark Crystal?",
+                    "question": "Dude, Where is my car?",
+                    "value": 400
+                }
+            ]
+        }
+    ]
+}
