@@ -54,6 +54,9 @@ $(function(){
     $('#next-round').unbind('click').click(function(e){
         e.stopPropagation();
         currentRound++;
+        if (rounds[currentRound] === 'double-jeopardy' && !hasDoubleJeopardy()) {
+            currentRound++;
+        }
         if (currentRound == rounds.length) {
             $(this).prop('disabled', true);
             window.location.reload();
@@ -232,6 +235,10 @@ function resetTimer() {
     isTimerActive = false;
     timerCount = 0;
     $('.timer-square').css('background-color', 'black');
+}
+
+function hasDoubleJeopardy() {
+    return Array.isArray(jsonData['double-jeopardy']) && jsonData['double-jeopardy'].length > 0;
 }
 
 function adjustScores(){
