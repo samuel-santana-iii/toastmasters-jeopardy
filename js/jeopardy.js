@@ -26,6 +26,7 @@ $(function(){
                 openingTheme.currentTime = 0;
                 openingRockTheme.pause();
                 openingRockTheme.currentTime = 0;
+		// TODO: Custom Sound with themes
                 var boardFillSound = new Audio('./sounds/board_fill.mp3');
                 boardFillSound.play();
                 $('#game-load-modal').modal('hide');
@@ -219,8 +220,8 @@ var timerObject;
 var timerCount;
 var gameDataFile;
 var openingRockTheme = new Audio('./sounds/theme_rock.mp3');
-var openingTheme = new Audio('./sounds/theme.mp3');
-// var openingTheme = new Audio('./sounds/theme_modern.mp3');
+// TODO: Custom openingTheme with custom themes
+var openingTheme = new Audio('./sounds/theme_modern.mp3');
 
 
 function runTimer() {
