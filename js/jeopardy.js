@@ -77,7 +77,6 @@ $(function(){
         //event bound to clicking on a tile. it grabs the data from the click event, populates the modal, fires the modal, and binds the answer method
         var category = $(this).parent().data('category');
         var question = $(this).data('question');
-        var answer = currentBoard[category].questions[question].answer;
         var value = currentBoard[category].questions[question].value;
         var questionImage = currentBoard[category].questions[question].image;
         var isDailyDouble = 'daily-double' in currentBoard[category].questions[question] ?
@@ -92,7 +91,7 @@ $(function(){
         }
         else {
             // Candidate for refactoring.
-            $('#modal-answer-title').empty().text(currentBoard[category].name + ' - $' + value);
+            $('#modal-clue-title').empty().text(currentBoard[category].name + ' - $' + value);
             $('#question').empty().text(currentBoard[category].questions[question].question);
             if (questionImage){
                 if (questionImage.startsWith("http") || questionImage.startsWith("data")) {
@@ -107,7 +106,7 @@ $(function(){
                 $('#question-image').empty().hide();
             }
             $('#question-modal').modal('show');
-            $('#answer-close-button').data('question', question).data('category', category);
+            $('#done-button').data('question', question).data('category', category);
         }
         $('#daily-double-wager').click(function(){
             var inputDailyDoubleValue = $('#daily-double-wager-input').val();
@@ -119,28 +118,24 @@ $(function(){
             	&& Math.max(maxRoundWager, window[scoreVariable]) >= parseInt(inputDailyDoubleValue) ) {
 
                 value = parseInt(inputDailyDoubleValue);
-                $('#modal-answer-title').empty().text(currentBoard[category].name + ' - $' + value);
-                $('#question-modal .score-button').data('value', value).data('question', question).data('category', category);
+                $('#modal-clue-title').empty().text(currentBoard[category].name + ' - $' + value);
                 $('#daily-double-modal').modal('hide');
 
                 $('#question').empty().text(currentBoard[category].questions[question].question);
                 if (questionImage){
-                    $('#question-image').empty().append("<img src=./" + questionImage + ">").show();
+                    if (questionImage.startsWith("http") || questionImage.startsWith("data")) {
+                        srcPrefix = ''
+                    }
+                    else {
+                        srcPrefix = './'
+                    }
+                    $('#question-image').empty().append("<img src=" + srcPrefix + questionImage + ">").show();
                 }
                 else {
                     $('#question-image').empty().hide();
                 }
-                $('#answer-text').text(answer).hide();
                 $('#question-modal').modal('show');
-                //resizeAnswerModal();
-                //$('#answer-close-button').hide().data('question', question).data('category', category);
-                $('#answer-close-button').data('question', question).data('category', category);
-                $('#answer-show-button').show();
-                $('#question-modal .score-button').prop('disabled', true);
-                $('#p' + control.toString() + '-wrong-button').prop('disabled', false);
-                $('#p' + control.toString() + '-right-button').prop('disabled', false);
-                $('#question-modal .score-button.btn-success').data('question', question).data('category', category);
-
+                $('#done-button').data('question', question).data('category', category);
             }
         });
 		//$('#question-modal').on('loaded.bs.modal', resizeAnswerModal());
@@ -394,7 +389,7 @@ function resizeAnswerModal() {
 }
 
 function handleAnswer(){
-    $('#answer-close-button').click(function(){
+    $('#done-button').click(function(){
         var tile = $('div[data-category="' + $(this).data('category') + '"]>[data-question="' +
             $(this).data('question') + '"]')[0];
         $(tile).empty().append('&nbsp;<div class="clearfix"></div>').removeClass('unanswered').unbind().css('cursor','not-allowed');
