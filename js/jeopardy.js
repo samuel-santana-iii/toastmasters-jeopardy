@@ -106,16 +106,8 @@ $(function(){
             else {
                 $('#question-image').empty().hide();
             }
-            $('#answer-text').text(answer).hide();
             $('#question-modal').modal('show');
-            //resizeAnswerModal();
-            //$('#answer-close-button').hide().data('question', question).data('category', category);
             $('#answer-close-button').data('question', question).data('category', category);
-            $('#answer-show-button').show();
-            $('#question-modal .score-button').data('value', value);
-            $('#question-modal .score-button').prop('disabled', false);
-            $('#question-modal .score-button.btn-success').data('question', question).data('category', category);
-
         }
         $('#daily-double-wager').click(function(){
             var inputDailyDoubleValue = $('#daily-double-wager-input').val();
@@ -402,46 +394,11 @@ function resizeAnswerModal() {
 }
 
 function handleAnswer(){
-    $('.score-button').unbind("click").click(function(e){
-        e.stopPropagation();
-        var buttonID = $(this).attr("id");
-        var answerValue = parseInt($(this).data('value'));
-        var buttonAction = buttonID.substr(3, 5);
-        var playerNumber = buttonID.charAt(1);
-        var scoreVariable = 'score_player_' + playerNumber;
-
-        buttonAction === 'right' ? window[scoreVariable] += answerValue
-            : window[scoreVariable] -= answerValue;
-        $(this).prop('disabled', true);
-        var otherButtonID = '#p' + playerNumber + '-' + (buttonAction === 'right' ? 'wrong' : 'right') + '-button';
-        $(otherButtonID).prop('disabled', true);
-        resetTimer();
-
-        // Possible behavior of disabling all scoring after a right answer?
-        if (buttonAction === 'right') {
-            var tile = $('div[data-category="' + $(this).data('category') + '"]>[data-question="' +
-                $(this).data('question') + '"]')[0];
-            //console.log(tile);
-            $('#question-modal .score-button').prop('disabled', true);
-            control = playerNumber;
-
-            $(tile).empty().append('&nbsp;<div class="clearfix"></div>').removeClass('unanswered').unbind().css('cursor','not-allowed');
-            $('#question-modal').modal('hide');
-
-        }
-        updateScore();
-    });
-
-    $('#answer-show-button').click(function(){
-        $(this).hide();
-        $('#answer-text').show();
-        resizeAnswerModal();
-        //$('#answer-close-button').show();
-    });
     $('#answer-close-button').click(function(){
         var tile = $('div[data-category="' + $(this).data('category') + '"]>[data-question="' +
             $(this).data('question') + '"]')[0];
         $(tile).empty().append('&nbsp;<div class="clearfix"></div>').removeClass('unanswered').unbind().css('cursor','not-allowed');
+        resetTimer();
         $('#question-modal').modal('hide');
     });
 
