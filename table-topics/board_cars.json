@@ -80,7 +80,7 @@
                     "image": "images/deadpool.png",
                     "question": "Art courtesy http://kalangozilla.deviantart.com/",
                     "value": 600,
-                    "daily-double": true
+                    "daily-double": false
                 },
                 {
                     "answer": "What is Spawn?",
@@ -178,7 +178,7 @@
                     "answer": "What is Adventure Time?",
                     "question": "THE 3DS GAME BASED ON THIS ANIMATED SERIES IS SUBTITLED \"HEY ICE KING! WHY'D YOU STEAL OUR GARBAGE?!\"",
                     "value": 800,
-                    "daily-double": true
+                    "daily-double": false
                 },
                 {
                     "answer": "What is Pac-Man Fever?",
@@ -261,7 +261,7 @@
                     "answer": "Who is Tidus?",
                     "question": "Which is better? Racing with F1 Cars or with horses?",
                     "value": 300,
-                    "daily-double": true
+                    "daily-double": false
                 },
                 {
                     "answer": "Who is Princess Buttercup?",
