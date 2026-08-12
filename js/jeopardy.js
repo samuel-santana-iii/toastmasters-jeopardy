@@ -18,9 +18,6 @@ $(function(){
                 var data = $.parseJSON(fileText);
                 jsonData = data;
                 currentBoard = jsonData[rounds[currentRound]];
-                $("#player-1-name").empty().text(playerTranslation[1]);
-                $("#player-2-name").empty().text(playerTranslation[2]);
-                $("#player-3-name").empty().text(playerTranslation[3]);
                 loadBoard();
                 openingTheme.pause();
                 openingTheme.currentTime = 0;
@@ -81,7 +78,6 @@ $(function(){
         var category = $(this).parent().data('category');
         var question = $(this).data('question');
         var value = currentBoard[category].questions[question].value;
-        var questionImage = currentBoard[category].questions[question].image;
         var isDailyDouble = 'daily-double' in currentBoard[category].questions[question] ?
             currentBoard[category].questions[question]['daily-double'] : false;
 
@@ -89,74 +85,20 @@ $(function(){
             var dailyDoubleSound = new Audio('./sounds/daily_double.mp3');
             dailyDoubleSound.play();
             $('#daily-double-modal-title').empty().text(currentBoard[category].name + ' - $' + value);
-            $('#daily-double-wager-input').val('');
             $('#daily-double-modal').modal('show');
         }
         else {
-            // Candidate for refactoring.
-            $('#modal-clue-title').empty().text(currentBoard[category].name + ' - $' + value);
-            $('#question').empty().text(currentBoard[category].questions[question].question);
-            if (questionImage){
-                if (questionImage.startsWith("http") || questionImage.startsWith("data")) {
-                    srcPrefix = ''
-                }
-                else {
-                    srcPrefix = './'
-                }
-                $('#question-image').empty().append("<img src=" + srcPrefix + questionImage + ">").show();
-            }
-            else {
-                $('#question-image').empty().hide();
-            }
-            $('#question-modal').modal('show');
-            $('#done-button').data('question', question).data('category', category);
+            showClue(category, question);
         }
-        $('#daily-double-wager').click(function(){
-            var inputDailyDoubleValue = $('#daily-double-wager-input').val();
-            var maxRoundWager = Math.max.apply(Math, currentBoard[0]['questions'].map(function(o){return o.value}));
-            var scoreVariable = 'score_player_' + control;
-
-            //get max of maxRoundWager and controlling user score.
-            if ( !(isNaN(inputDailyDoubleValue)) && inputDailyDoubleValue !== '' && parseInt(inputDailyDoubleValue) >= 5
-            	&& Math.max(maxRoundWager, window[scoreVariable]) >= parseInt(inputDailyDoubleValue) ) {
-
-                value = parseInt(inputDailyDoubleValue);
-                $('#modal-clue-title').empty().text(currentBoard[category].name + ' - $' + value);
-                $('#daily-double-modal').modal('hide');
-
-                $('#question').empty().text(currentBoard[category].questions[question].question);
-                if (questionImage){
-                    if (questionImage.startsWith("http") || questionImage.startsWith("data")) {
-                        srcPrefix = ''
-                    }
-                    else {
-                        srcPrefix = './'
-                    }
-                    $('#question-image').empty().append("<img src=" + srcPrefix + questionImage + ">").show();
-                }
-                else {
-                    $('#question-image').empty().hide();
-                }
-                $('#question-modal').modal('show');
-                $('#done-button').data('question', question).data('category', category);
-            }
+        $('#daily-double-continue').click(function(){
+            $('#daily-double-modal').modal('hide');
+            showClue(category, question);
         });
 		//$('#question-modal').on('loaded.bs.modal', resizeAnswerModal());
 		$('#question-modal').on('shown.bs.modal', function (e) {
 		  resizeAnswerModal();
 		})
         handleAnswer();
-    });
-    $('#score-adjust').click(function(){
-        $('#score-adjust-modal').modal('show');
-        $('#name-player-1-input').val(playerTranslation[1]);
-        $('#name-player-2-input').val(playerTranslation[2]);
-        $('#name-player-3-input').val(playerTranslation[3]);
-        $('#score-player-1-input').val(score_player_1);
-        $('#score-player-2-input').val(score_player_2);
-        $('#score-player-3-input').val(score_player_3);
-        $("input[name=control-input][value=" + control + "]").attr('checked', 'checked');
-        adjustScores();
     });
     $(document).on('click', '#final-jeopardy-question-button', function(){
         $(this).hide();
@@ -165,24 +107,6 @@ $(function(){
         revealSound.play();
         $('#final-image').show();
         $('#final-jeopardy-logo-img').hide();
-        $('#final-jeopardy-music-button').show();
-        // console.log('30 seconds, good luck'); Cue music
-    });
-    $(document).on('click', '#final-jeopardy-music-button',function(){
-        $(this).hide();
-        var thinkMusicSound = new Audio('./sounds/think_music.mp3');
-        thinkMusicSound.play();
-
-        setTimeout(function(){
-            $('#final-jeopardy-answer-button').show();
-        }, 30000);
-    });
-    $(document).on('click', '#final-jeopardy-answer-button',function(){
-        $(this).hide();
-        $('#final-jeopardy-modal-answer').text(currentBoard['answer']);
-        $('#final-jeopardy-modal-answer').hide();
-        $('#final-jeopardy-modal').modal('show');
-        handleFinalAnswer();
     });
     $(window).resize(function(){
 	    var textHeight = Math.max.apply(null, ($('.category-title').map(function(){return $(this).height();})));
@@ -196,12 +120,7 @@ $(function(){
 
 });
 
-var score_player_1 = 0;
-var score_player_2 = 0;
-var score_player_3 = 0;
-var control = 1;
 var rounds = ['jeopardy', 'double-jeopardy', 'final-jeopardy'];
-var playerTranslation = {1: 'Red', 2: 'Blue', 3: 'Green'};
 var currentBoard;
 var currentRound = 0;
 var isTimerActive = false;
@@ -241,47 +160,25 @@ function hasDoubleJeopardy() {
     return Array.isArray(jsonData['double-jeopardy']) && jsonData['double-jeopardy'].length > 0;
 }
 
-function adjustScores(){
-    $('#score-adjust-save').click(function(){
-        for (var i = 1; i < 4; i++) {
-            var scoreVariableName = 'score_player_' + i;
-            var inputName = '#score-player-' + i + '-input';
-            var newScoreValue = $(inputName).val();
-            if (!(isNaN(newScoreValue))) {
-                window[scoreVariableName] = parseInt(newScoreValue);
-            }
-
-            var nameInputName = '#name-player-' + i + '-input';
-            var labelInputName = '#player-' + i + '-name';
-            var newNameValue = $(nameInputName).val();
-            if (newNameValue) {
-                playerTranslation[i] = newNameValue;
-                $(labelInputName).empty().text(newNameValue);
-            }
+function showClue(category, question) {
+    var value = currentBoard[category].questions[question].value;
+    var questionImage = currentBoard[category].questions[question].image;
+    $('#modal-clue-title').empty().text(currentBoard[category].name + ' - $' + value);
+    $('#question').empty().text(currentBoard[category].questions[question].question);
+    if (questionImage){
+        if (questionImage.startsWith("http") || questionImage.startsWith("data")) {
+            srcPrefix = ''
         }
-		control = $("input[name=control-input]:checked").val();
-
-        updateScore();
-    });
-}
-
-function updateScore(){
-	var score_text = '';
-	score_player_1 < 0 ? score_text = '-$' + Math.abs(score_player_1).toString() : score_text = "$" + score_player_1.toString();
-	score_player_1 < 0 ? $('#player-1-score').css('color', 'red') : $('#player-1-score').css('color', 'white');
-    $('#player-1-score').empty().text(score_text);
-
-	score_player_2 < 0 ? score_text = '-$' + Math.abs(score_player_2).toString() : score_text = "$" + score_player_2.toString();
-	score_player_2 < 0 ? $('#player-2-score').css('color', 'red') : $('#player-2-score').css('color', 'white');
-    $('#player-2-score').empty().text(score_text);
-
-	score_player_3 < 0 ? score_text = '-$' + Math.abs(score_player_3).toString() : score_text = "$" + score_player_3.toString();
-	score_player_3 < 0 ? $('#player-3-score').css('color', 'red') : $('#player-3-score').css('color', 'white');
-    $('#player-3-score').empty().text(score_text);
-
-	$('#control-player').empty().text(playerTranslation[control]);
-    //$('#player-2-score').empty().text(score_player_2);
-    //$('#player-3-score').empty().text(score_player_3);
+        else {
+            srcPrefix = './'
+        }
+        $('#question-image').empty().append("<img src=" + srcPrefix + questionImage + ">").show();
+    }
+    else {
+        $('#question-image').empty().hide();
+    }
+    $('#question-modal').modal('show');
+    $('#done-button').data('question', question).data('category', category);
 }
 
 function loadBoard() {
@@ -290,18 +187,13 @@ function loadBoard() {
     if (rounds[currentRound] === "final-jeopardy") {
         finalQuestionImage = currentBoard['image'];
         $('#end-round').hide();
-        $('#control-info').hide();
         $('#main-board-categories').append('<div class="text-center col-md-6 col-md-offset-3"><h2 class="category-text">' +
             currentBoard['category'] + '</h2></div>').css('background-color', 'navy');
         finalImage = '<div id="final-image" class="text-center"></div>';
         board.append('<div class="text-center col-md-6 col-md-offset-3"><h2><img src="./images/final_jeopardy.png" id="final-jeopardy-logo-img"></h2>'+
         	finalImage + '<h2 id="final-jeopardy-question" class="question-text">' +
-            currentBoard['question'] + '</h2><button class="btn btn-primary" id="final-jeopardy-question-button">Show Question</button>' +
-            '<button class="btn btn-primary" id="final-jeopardy-music-button">30 Seconds, Good Luck</button>' +
-            '<button class="btn btn-primary" id="final-jeopardy-answer-button">Show Answer</button></div>').css('background-color', 'navy');
+            currentBoard['question'] + '</h2><button class="btn btn-primary" id="final-jeopardy-question-button">Show Question</button></div>').css('background-color', 'navy');
         $('#final-jeopardy-question').hide();
-        $('#final-jeopardy-music-button').hide();
-        $('#final-jeopardy-answer-button').hide();
         if (finalQuestionImage){
             if (finalQuestionImage.startsWith("http") || finalQuestionImage.startsWith("data")) {
                 srcPrefix = ''
@@ -314,23 +206,8 @@ function loadBoard() {
         else {
             $('#final-image').empty().hide();
         }
-        $('#wager-player-1-input').attr("placeholder", playerTranslation[1] + " Wager");
-        $('#wager-player-2-input').attr("placeholder", playerTranslation[2] + " Wager");
-        $('#wager-player-3-input').attr("placeholder", playerTranslation[3] + " Wager");
     }
     else {
-	    if (rounds[currentRound] === "double-jeopardy") {
-		    if (score_player_1 <= score_player_2 && score_player_1 <= score_player_3) {
-			    control = 1;
-		    }
-		    else if (score_player_2 <= score_player_3) {
-			    control = 2;
-		    }
-		    else {
-			    control = 3;
-		    }
-	    }
-        $('#control-player').empty().text(playerTranslation[control]);
         $('#end-round').show();
         board.css('background-color', 'black');
         var columns = currentBoard.length;
@@ -417,36 +294,4 @@ function handleAnswer(){
         }
         //isTimerActive = isTimerActive ? false : true;
     });
-}
-
-function handleFinalAnswer(){
-    $('.final-score-button').unbind('click').click(function(e){
-        e.stopPropagation();
-        var buttonID = $(this).attr("id");
-        var buttonAction = buttonID.substr(9,5);
-        var playerNumber = buttonID.charAt(7);
-        var wagerID = '#wager-player-' + playerNumber + '-input';
-        var wager = $(wagerID).val() == '' ? 0 : parseInt($(wagerID).val());
-        var scoreVariable = 'score_player_' + playerNumber;
-        var otherButtonID = '#final-p' + playerNumber + '-' +
-            (buttonAction === 'right' ? 'wrong' : 'right') + '-button';
-
-        buttonAction === 'right' ? window[scoreVariable] += wager : window[scoreVariable] -= wager;
-
-        $(this).prop('disabled', true);
-        $(otherButtonID).prop('disabled', true);
-        $(wagerID).prop('disabled', true).val('$' + window[scoreVariable]);
-
-        updateScore();
-
-    });
-
-
-    $('#final-answer-show-button').click(function(){
-        $(this).hide();
-        $('#final-jeopardy-modal-answer').show();
-        //resizeAnswerModal();
-        //$('#answer-close-button').show();
-    });
-
 }

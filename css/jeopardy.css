@@ -1,11 +1,3 @@
-#player-1-score-div {
-	text-align: right;
-}
-
-#player-2-score-div {
-	text-align: center;
-}
-
 #main-board {
 	background-image: none;
 	background-color: black;
@@ -16,15 +8,6 @@
 	background-color: black;
 	border: none;
 	color: white;
-}
-
-.score-button-group {
-	text-align: center;
-}
-
-.control-button-group {
-	text-align: center;
-	height: 15px
 }
 
 .category {
