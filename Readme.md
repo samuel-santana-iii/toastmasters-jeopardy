@@ -1,6 +1,6 @@
 ## Synopsis
 
-A HTML5 version of Jeopardy using Javascript, JQuery, JSON, and Bootstrap. 
+A HTML5 version of Jeopardy using Javascript, JQuery, JSON, and Bootstrap, adapted for running Table Topics during Toastmasters Club meetings.
 
 ## Code Example
 
@@ -11,22 +11,30 @@ Use board.json for sample input. Use that format when loading the game.
 
 ## Motivation
 
-At PAX East 2014, the PowerPoint version of Jeopardy used for Game Show night vomited all the answers, so I thought that there has to be a better HTML5 version of this so that it works.
+Members of my Toastmasters club have always brought a lot of creativity to Table Topics, with photos, grab bags, and even tiny trophies for participants. Inspired by that, I thought a Jeopardy board would be a fun way to run it. I started from the original Jeopardy project and forked it into this version.
 
 ## Installation
 
-Host on a website. Images should be located on the host server but referenced in the game JSON file.
+Clone the repository, then open `index.html` directly in your browser, no server required. To build your own board, copy `board.json` (the included sample) to a new file, edit it with your own categories and prompts, and load it from the game's file picker.
+
+This can optionally be hosted on any static webserver instead, if you'd like to share a link rather than run it locally.
+
+## Tips
+
+- You can have 4 categories with 4-5 questions each. This should be enough to cover the Table Topics duration
+- Daily Doubles are optional. Use them if you'd like the game master to award a special prize for landing on certain topics.
+- The second round can be skipped entirely (leave `"double-jeopardy": []` in your board file). One round is usually plenty for a typical Toastmasters meeting.
 
 ## TODO
 
-- Whatever Dan wants at this point.
+- Whatever Sam wants at this point.
 
 ## Contributors
 
-Special thanks to Dan Amrich for giving the blessing to work on this project.
-
-Thanks to Ryan McDevitt for posting a general framework to base improvements on.
+- Original contributions from the [original repository](https://github.com/mvbattista/jeopardy) by [Michael V. Battista](https://github.com/mvbattista).
+  - Special thanks to Dan Amrich for giving the blessing to work on this project to Michael Battista
+  - Thanks to Ryan McDevitt for posting a general framework to base improvements on.
 
 ## License
 
-This software is GNU GPL v3. Feel free to contribute to the TODO projects or modify it to your needs.
+This software is GNU GPL v3. Feel free to modify it to your needs.
