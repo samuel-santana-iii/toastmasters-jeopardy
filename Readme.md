@@ -19,6 +19,12 @@ Clone the repository, then open `index.html` directly in your browser, no server
 
 This can optionally be hosted on any static webserver instead, if you'd like to share a link rather than run it locally.
 
+## Tips
+
+- You can have 4 categories with 4-5 questions each. This should be enough to cover the Table Topics duration
+- Daily Doubles are optional. Use them if you'd like the game master to award a special prize for landing on certain topics.
+- The second round can be skipped entirely (leave `"double-jeopardy": []` in your board file). One round is usually plenty for a typical Toastmasters meeting.
+
 ## TODO
 
 - Whatever Sam wants at this point.
