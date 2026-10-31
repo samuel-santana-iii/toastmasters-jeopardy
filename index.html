@@ -34,6 +34,7 @@
     <!-- Static copy -->
   <script type="text/javascript" language="Javascript" src="./bootstrap-static/3.3.5/js/bootstrap.min.js"></script>
 
+  <script type="text/javascript" language="Javascript" src="./js/sets-store.js"></script>
   <script type="text/javascript" language="Javascript" src="./js/jeopardy.js"></script>
 
   <title>HTML Jeopardy</title>
@@ -95,20 +96,28 @@
     <div class="modal-dialog" id="game-load-modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title text-center">Please select a game file to upload</h4>
+          <h4 class="modal-title text-center">Choose a question set to play</h4>
         </div>
         <div class="modal-body text-center" id="game-load-logo-div">
           <!-- TODO: Custom logo image -->
           <img src="./images/jeopardy_logo.jpg" id="game-load-logo-img">
         </div>
+        <div class="modal-body" id="saved-sets-div">
+          <p id="saved-sets-message" class="saved-sets-message"></p>
+          <div id="saved-set-picker">
+            <label for="saved-set-select">Question set:</label>
+            <select id="saved-set-select" class="form-control"></select>
+            <button type="button" class="btn btn-primary" id="play-set-button">Play</button>
+          </div>
+          <p id="saved-set-issue"></p>
+        </div>
         <div class="modal-body text-center" id="game-load-input-div">
-          <input type="file" id="input-file">
-          <button type="button" class="btn btn-primary" id="game-load-input-button">Load Game</button>
+          <a href="./creator/index.html" class="btn btn-info" id="manage-sets-link">Manage question sets</a>
           <button type="button" class="btn btn-danger" id="kill-music-button">Kill Music </button>
           <button type="button" class="btn btn-success" id="play-music-button">Play Music</button>
         </div>
         <div class="modal-footer">
-          <p class="bg-danger" id="game-load-error" aria-hidden="true"></p>
+          <p class="bg-danger" id="game-load-error" role="alert"></p>
         </div>
       </div>
     </div>

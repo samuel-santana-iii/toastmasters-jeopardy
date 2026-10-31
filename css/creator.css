@@ -46,7 +46,6 @@
   font-weight: bold;
   font-size: 13px;
   padding: 8px 22px 8px 4px;
-  text-transform: uppercase;
   outline: none;
 }
 .category-name-input::placeholder {
@@ -74,27 +73,33 @@
   padding: 12px 4px;
   text-align: center;
   cursor: pointer;
-  color: goldenrod;
-  font-family: Impact, sans-serif;
-  font-size: 26px;
+  color: white;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
   border-radius: 3px;
   display: block;
   width: 100%;
   transition: border-color 0.15s;
+}
+.question-tile-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  overflow-wrap: anywhere;
 }
 .question-tile:hover {
   border-color: goldenrod;
   background-color: #000080;
 }
 .dd-badge {
-  /*display: block;*/
-  /*font-family: Helvetica, Arial, sans-serif;*/
-  /*font-size: 10px;*/
-  /*color: #ffd700;*/
-  /*font-weight: bold;*/
-  /*letter-spacing: 1px;*/
-  /*margin-top: 2px;*/
-  color: white;
+  display: block;
+  font-size: 10px;
+  color: #ffd700;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-top: 4px;
 }
 .add-q-btn {
   width: 100%;
@@ -175,14 +180,17 @@
   border-color: goldenrod;
 }
 /* Edit modal overrides */
-#edit-modal .modal-content {
+#edit-modal .modal-content,
+#import-modal .modal-content {
   background-color: navy;
   color: white;
 }
-#edit-modal .modal-header {
+#edit-modal .modal-header,
+#import-modal .modal-header {
   border-bottom-color: #333;
 }
-#edit-modal .modal-footer {
+#edit-modal .modal-footer,
+#import-modal .modal-footer {
   border-top-color: #333;
 }
 #edit-modal .form-control {
@@ -202,7 +210,8 @@
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-#edit-modal .modal-title {
+#edit-modal .modal-title,
+#import-modal .modal-title {
   font-family: Impact, sans-serif;
   color: goldenrod;
   font-size: 24px;
@@ -224,19 +233,153 @@
   text-transform: uppercase;
 }
 .page-header-bar p {
-  color: #aaa;
+  color: #ccc;
   font-size: 13px;
   margin: 4px 0 0 0;
 }
+.back-to-game {
+  float: right;
+}
+/* Set library */
+.library-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.library-actions button:disabled,
+.set-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.set-select-label {
+  color: goldenrod;
+  font-weight: bold;
+  margin: 0;
+}
+.set-select {
+  width: 280px;
+  max-width: 100%;
+  height: 40px;
+  background-color: black;
+  color: white;
+  border: 1px solid goldenrod;
+  border-radius: 3px;
+  padding: 0 8px;
+  font-size: 15px;
+}
+.set-state {
+  flex: 1 1 180px;
+  min-width: 0;
+  font-size: 13px;
+  color: #8fd694;
+  overflow-wrap: anywhere;
+}
+.set-state-issue {
+  color: #ccc;
+}
+.set-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.set-actions .btn-download,
+.set-actions .btn-load-json {
+  padding: 8px 12px;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+.set-actions .btn-delete-set {
+  color: #ff9999;
+  border-color: #a94442;
+}
+.set-actions .btn-delete-set:hover {
+  color: white;
+  border-color: #ff9999;
+}
+.set-actions-divider {
+  width: 1px;
+  height: 24px;
+  margin: 0 6px;
+  background-color: #555;
+}
+.library-empty,
+.editor-hint {
+  color: #ccc;
+  font-size: 13px;
+}
+.editor-hint {
+  margin-top: 10px;
+}
+.storage-error {
+  background-color: #a94442;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+}
+.import-report {
+  background-color: black;
+  border-left: 3px solid goldenrod;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  overflow-wrap: anywhere;
+}
+.import-report-error {
+  color: #ff9999;
+}
+/* Import checklist */
+.import-filename {
+  color: #ccc;
+  overflow-wrap: anywhere;
+}
+.import-select-actions {
+  margin-bottom: 10px;
+}
+.import-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-weight: normal;
+  padding: 8px 0;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+}
+.import-row-invalid {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+.import-name {
+  display: block;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+.import-note {
+  display: block;
+  font-size: 12px;
+  color: #ddd;
+}
 /* Bottom toolbar */
 .bottom-toolbar {
+  position: sticky;
+  bottom: 0;
+  min-height: 48px;
   background-color: black;
   border-top: 2px solid goldenrod;
-  padding: 16px 20px;
+  padding: 12px 20px;
   margin-top: 30px;
   display: flex;
   align-items: center;
   gap: 12px;
+}
+.save-status {
+  color: #8fd694;
+  font-size: 13px;
+}
+.save-status-error {
+  color: #ff9999;
 }
 .btn-download {
   background-color: goldenrod;
@@ -268,7 +411,7 @@
   color: white;
 }
 .toolbar-hint {
-  color: #555;
+  color: #ccc;
   font-size: 12px;
   margin-left: auto;
 }
