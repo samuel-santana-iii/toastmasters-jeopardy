@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Jeopardy Board Creator</title>
+    <title>Question Sets</title>
     <link rel="stylesheet" type="text/css" href="../bootstrap-static/3.3.5/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="../bootstrap-static/3.3.5/css/bootstrap-theme.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/jeopardy.css" />
@@ -11,44 +11,61 @@
 <body>
 
     <div class="page-header-bar">
-        <h1>Board Creator</h1>
-        <p>Click any question tile to edit it. Use the toolbar below to download or load a game file.</p>
+        <a href="../index.html" class="btn btn-default back-to-game">Back to game</a>
+        <h1>Question Sets</h1>
+        <p>Sets are saved in this browser as you edit. Use Export all to keep a backup or move them to another browser.</p>
     </div>
 
     <div class="container-fluid">
 
-        <!-- Jeopardy Round -->
+        <!-- Set library -->
         <div class="creator-section">
-            <div class="round-title">Jeopardy</div>
-            <div class="creator-board">
-                <div id="board-jeopardy"></div>
+            <div class="library-actions">
+                <label for="set-select" class="set-select-label">Set:</label>
+                <select id="set-select" class="set-select"></select>
+                <span id="set-state" class="set-state"></span>
+                <div class="set-actions">
+                    <button id="new-set-btn" class="btn-download">+ New</button>
+                    <button id="rename-set-btn" class="btn-load-json">Rename</button>
+                    <button id="duplicate-set-btn" class="btn-load-json">Duplicate</button>
+                    <button id="export-set-btn" class="btn-load-json">Export</button>
+                    <button id="delete-set-btn" class="btn-load-json btn-delete-set">Delete</button>
+                    <span class="set-actions-divider"></span>
+                    <button id="import-btn" class="btn-load-json">Import</button>
+                    <button id="export-all-btn" class="btn-load-json">Export all</button>
+                </div>
+                <input type="file" id="import-file-input" accept=".json" multiple style="display:none">
             </div>
+            <div id="storage-error" class="storage-error" role="alert" style="display:none"></div>
+            <div id="import-report" class="import-report" role="status" style="display:none"></div>
+            <p id="library-empty" class="library-empty" style="display:none">No saved sets yet. Create a new set, or import one from a file.</p>
         </div>
 
-        <!-- Double Jeopardy Round -->
-        <div class="creator-section">
-            <div class="round-title">Double Jeopardy</div>
-            <div class="creator-board">
-                <div id="board-double-jeopardy"></div>
-            </div>
-        </div>
+        <div id="editor" style="display:none">
+            <p class="editor-hint">You can have up to 6 categories with 5 questions each. 4 categories with 4-5 questions usually suits a meeting.</p>
 
-        <!-- Final Jeopardy -->
-        <div class="creator-section">
-            <div class="round-title">Final Jeopardy</div>
-            <div class="final-jeopardy-board">
-                <div class="row">
-                    <div class="col-md-4">
-                        <label class="fj-label" for="fj-category">Category</label>
-                        <input id="fj-category" type="text" class="fj-input" placeholder="FINAL JEOPARDY CATEGORY">
-                    </div>
-                    <div class="col-md-5">
-                        <label class="fj-label" for="fj-question">Question</label>
-                        <textarea id="fj-question" class="fj-textarea" rows="3" placeholder="ENTER THE FINAL JEOPARDY QUESTION"></textarea>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="fj-label" for="fj-answer">Answer</label>
-                        <input id="fj-answer" type="text" class="fj-input" placeholder="Enter the answer">
+            <!-- Jeopardy Round -->
+            <div class="creator-section">
+                <div class="round-title">Jeopardy</div>
+                <div class="creator-board">
+                    <div id="board-jeopardy"></div>
+                </div>
+                <p id="second-round-note" class="editor-hint" style="display:none">This set also has a second round from an imported file. It is kept and will still play, but it can't be edited here.</p>
+            </div>
+
+            <!-- Final Jeopardy -->
+            <div class="creator-section">
+                <div class="round-title">Final Jeopardy</div>
+                <div class="final-jeopardy-board">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="fj-label" for="fj-category">Category</label>
+                            <input id="fj-category" type="text" class="fj-input" placeholder="Final round category">
+                        </div>
+                        <div class="col-md-8">
+                            <label class="fj-label" for="fj-question">Question</label>
+                            <textarea id="fj-question" class="fj-textarea" rows="3" placeholder="Final round question"></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -58,10 +75,8 @@
 
     <!-- Bottom Toolbar -->
     <div class="bottom-toolbar">
-        <button id="download-btn" class="btn-download">&#11015; Download JSON</button>
-        <button id="load-btn" class="btn-load-json">&#128194; Load JSON File</button>
-        <input type="file" id="load-file-input" accept=".json" style="display:none">
-        <span class="toolbar-hint">Changes are reflected in real time &mdash; download when ready.</span>
+        <span id="save-status" class="save-status" role="status"></span>
+        <span id="set-issues" class="toolbar-hint"></span>
     </div>
 
     <!-- Edit Question Modal -->
@@ -69,36 +84,20 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:white; opacity:0.7;">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:white; opacity:0.7;">&times;</button>
                     <h4 class="modal-title" id="edit-modal-title">Edit Question</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="edit-question">Question</label>
-                        <textarea id="edit-question" class="form-control" rows="4" placeholder="ENTER THE QUESTION"></textarea>
+                        <textarea id="edit-question" class="form-control" rows="4" placeholder="Enter the question"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="edit-answer">Answer</label>
-                        <input id="edit-answer" type="text" class="form-control" placeholder="Enter the answer">
+                        <label style="font-size:14px; text-transform:none; letter-spacing:0; color:white; cursor:pointer; font-weight:normal;">
+                            <input id="edit-daily-double" type="checkbox" style="margin-right:6px;">
+                            Daily Double
+                        </label>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label for="edit-value">Point Value</label>
-                                <input id="edit-value" type="number" class="form-control" placeholder="200" step="100">
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label style="display:block">&nbsp;</label>
-                                <label style="font-size:14px; text-transform:none; letter-spacing:0; color:white; cursor:pointer; font-weight:normal;">
-                                    <input id="edit-daily-double" type="checkbox" style="margin-right:6px;">
-                                    Daily Double
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="modal-image-section"></div>
                 </div>
                 <div class="modal-footer">
                     <button id="edit-delete-btn" type="button" class="btn btn-danger pull-left">Delete Question</button>
@@ -108,8 +107,33 @@
         </div>
     </div>
 
+    <!-- Import Backup Modal -->
+    <div class="modal fade" id="import-modal" role="dialog" aria-labelledby="import-modal-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:white; opacity:0.7;">&times;</button>
+                    <h4 class="modal-title" id="import-modal-title">Import sets from backup</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="import-filename" class="import-filename"></p>
+                    <div class="import-select-actions">
+                        <button id="import-select-all" type="button" class="btn btn-default btn-sm">Select all</button>
+                        <button id="import-select-none" type="button" class="btn btn-default btn-sm">Select none</button>
+                    </div>
+                    <div id="import-checklist"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="import-confirm" type="button" class="btn btn-primary"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="text/javascript" src="../js/jquery-latest.min.js"></script>
     <script type="text/javascript" src="../bootstrap-static/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/sets-store.js"></script>
     <script type="text/javascript" src="./creator.js"></script>
 </body>
 </html>

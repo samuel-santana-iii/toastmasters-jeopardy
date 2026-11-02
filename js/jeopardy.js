@@ -8,31 +8,28 @@ $(function(){
 		openingRockTheme.play();
         // openingTheme.play();
 	}
-    $('#game-load-input-button').click(function(){
-        var file = $('#input-file').prop('files')[0];
-        if ($('#input-file').val() !== '') {
-            var reader = new FileReader();
-            reader.readAsText(file);
-            reader.onload = function(){
-                var fileText = reader.result;
-                var data = $.parseJSON(fileText);
-                jsonData = data;
-                currentBoard = jsonData[rounds[currentRound]];
-                loadBoard();
-                openingTheme.pause();
-                openingTheme.currentTime = 0;
-                openingRockTheme.pause();
-                openingRockTheme.currentTime = 0;
-		// TODO: Custom Sound with themes
-                var boardFillSound = new Audio('./sounds/board_fill.mp3');
-                boardFillSound.play();
-                $('#game-load-modal').modal('hide');
-            }
-            reader.onerror = function(e){
-                $('#game-load-error').text("Error: "+ e).show();
-            };
-
+    renderSavedSets();
+    // Coming back from the creator can restore this page from the browser's cache
+    $(window).on('pageshow', function(e){
+        if (e.originalEvent.persisted) {
+            renderSavedSets();
         }
+    });
+    $('#saved-set-select').change(updateSelectedSetIssue);
+    $('#play-set-button').click(function(){
+        var result = SetsStore.get($('#saved-set-select').val());
+        if (!result.ok) {
+            showLoadError(result.error);
+            renderSavedSets();
+            return;
+        }
+        var issues = SetsStore.playabilityIssues(result.set.board);
+        if (issues.length) {
+            showLoadError(issues[0]);
+            renderSavedSets();
+            return;
+        }
+        startGame(result.set.board);
     });
     $('#kill-music-button').click(function(){
         openingTheme.pause();
@@ -57,6 +54,7 @@ $(function(){
         if (currentRound == rounds.length) {
             $(this).prop('disabled', true);
             window.location.reload();
+            return;
         }
         else if (currentRound >= rounds.length - 1) {
             $(this).text('New Game');
@@ -121,6 +119,7 @@ $(function(){
 });
 
 var rounds = ['jeopardy', 'double-jeopardy', 'final-jeopardy'];
+var jsonData;
 var currentBoard;
 var currentRound = 0;
 var isTimerActive = false;
@@ -131,6 +130,91 @@ var gameDataFile;
 var openingRockTheme = new Audio('./sounds/theme_rock.mp3');
 // TODO: Custom openingTheme with custom themes
 var openingTheme = new Audio('./sounds/theme_modern.mp3');
+
+function startGame(data) {
+    // The load modal stays clickable while it fades out
+    if (jsonData) {
+        return;
+    }
+    jsonData = data;
+    currentBoard = jsonData[rounds[currentRound]];
+    loadBoard();
+    openingTheme.pause();
+    openingTheme.currentTime = 0;
+    openingRockTheme.pause();
+    openingRockTheme.currentTime = 0;
+    // TODO: Custom Sound with themes
+    var boardFillSound = new Audio('./sounds/board_fill.mp3');
+    boardFillSound.play();
+    $('#game-load-modal').modal('hide');
+}
+
+function showLoadError(message) {
+    $('#game-load-error').text(message).show();
+}
+
+function renderSavedSets() {
+    var select = $('#saved-set-select');
+    var previous = select.val();
+    var result = SetsStore.list();
+    var sets = result.ok ? result.sets : [];
+    var message = '';
+    if (!result.ok) {
+        message = result.error;
+    }
+    else if (sets.length === 0) {
+        message = 'No saved sets yet. Create one with Manage question sets.';
+    }
+    $('#saved-sets-message').text(message).toggle(message !== '');
+    $('#saved-set-picker').toggle(sets.length > 0);
+
+    // Start on the most recent set that can be played
+    var initial = sets.length ? sets[0].id : null;
+    var foundPlayable = false;
+    select.empty();
+    $.each(sets, function(i, set){
+        var issues = SetsStore.playabilityIssues(set.board);
+        if (issues.length === 0 && !foundPlayable) {
+            initial = set.id;
+            foundPlayable = true;
+        }
+        select.append($('<option>').val(set.id).text(set.name + (issues.length ? ' (incomplete)' : '')));
+    });
+    if (previous && select.find('option').filter(function(){ return this.value === previous; }).length) {
+        initial = previous;
+    }
+    select.val(initial);
+    updateSelectedSetIssue();
+}
+
+function updateSelectedSetIssue() {
+    var id = $('#saved-set-select').val();
+    var result = id ? SetsStore.get(id) : null;
+    var issues = result && result.ok ? SetsStore.playabilityIssues(result.set.board) : [];
+    $('#saved-set-issue').text(issues.length ? 'Incomplete: ' + issues[0] : '').toggle(issues.length > 0);
+    $('#play-set-button').prop('disabled', !id || issues.length > 0);
+}
+
+function escapeHtml(value) {
+    return $('<div>').text(value == null ? '' : String(value)).html().replace(/"/g, '&quot;');
+}
+
+// Board files can come from anyone, so only image sources are allowed through
+function imageSrc(image) {
+    if (/^(https?:|data:image\/)/i.test(image)) {
+        return image;
+    }
+    return /^[a-z][a-z0-9+.-]*:/i.test(image) ? null : './' + image;
+}
+
+function showImage(container, image, visible) {
+    var src = image ? imageSrc(image) : null;
+    container.empty();
+    if (src) {
+        container.append($('<img>').attr('src', src));
+    }
+    container.toggle(!!src && visible);
+}
 
 
 function runTimer() {
@@ -165,18 +249,7 @@ function showClue(category, question) {
     var questionImage = currentBoard[category].questions[question].image;
     $('#modal-clue-title').empty().text(currentBoard[category].name + ' - $' + value);
     $('#question').empty().text(currentBoard[category].questions[question].question);
-    if (questionImage){
-        if (questionImage.startsWith("http") || questionImage.startsWith("data")) {
-            srcPrefix = ''
-        }
-        else {
-            srcPrefix = './'
-        }
-        $('#question-image').empty().append("<img src=" + srcPrefix + questionImage + ">").show();
-    }
-    else {
-        $('#question-image').empty().hide();
-    }
+    showImage($('#question-image'), questionImage, true);
     $('#question-modal').modal('show');
     $('#done-button').data('question', question).data('category', category);
 }
@@ -188,24 +261,13 @@ function loadBoard() {
         finalQuestionImage = currentBoard['image'];
         $('#end-round').hide();
         $('#main-board-categories').append('<div class="text-center col-md-6 col-md-offset-3"><h2 class="category-text">' +
-            currentBoard['category'] + '</h2></div>').css('background-color', 'navy');
+            escapeHtml(currentBoard['category']) + '</h2></div>').css('background-color', 'navy');
         finalImage = '<div id="final-image" class="text-center"></div>';
         board.append('<div class="text-center col-md-6 col-md-offset-3"><h2><img src="./images/final_jeopardy.png" id="final-jeopardy-logo-img"></h2>'+
         	finalImage + '<h2 id="final-jeopardy-question" class="question-text">' +
-            currentBoard['question'] + '</h2><button class="btn btn-primary" id="final-jeopardy-question-button">Show Question</button></div>').css('background-color', 'navy');
+            escapeHtml(currentBoard['question']) + '</h2><button class="btn btn-primary" id="final-jeopardy-question-button">Show Question</button></div>').css('background-color', 'navy');
         $('#final-jeopardy-question').hide();
-        if (finalQuestionImage){
-            if (finalQuestionImage.startsWith("http") || finalQuestionImage.startsWith("data")) {
-                srcPrefix = ''
-            }
-            else {
-                srcPrefix = './'
-            }
-           $('#final-image').empty().append("<img src=" + srcPrefix + finalQuestionImage + ">").hide();
-        }
-        else {
-            $('#final-image').empty().hide();
-        }
+        showImage($('#final-image'), finalQuestionImage, false);
     }
     else {
         $('#end-round').show();
@@ -221,7 +283,7 @@ function loadBoard() {
                 header_class += ' col-md-offset-1';
             }
             $('#main-board-categories').append('<div class="category ' + header_class
-                + '"><div class="text-center well"><div class="category-title category-text text-center">' + category.name
+                + '"><div class="text-center well"><div class="category-title category-text text-center">' + escapeHtml(category.name)
                  + '</div></div><div class="clearfix"></div></div>').css('background-color', 'black');
 
             // Column
@@ -236,7 +298,7 @@ function loadBoard() {
             $.each(category.questions, function(n,question){
                 // Questions
                 column.append('<div class="well question unanswered text-center" data-question="' +
-                    n + '">$' + question.value + '</div>');
+                    n + '">$' + escapeHtml(question.value) + '</div>');
             });
         });
     }
